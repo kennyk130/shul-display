@@ -34,8 +34,13 @@ h1 {
     padding:0 1.5rem;
 }
 main > .wrapper {
-
   background: linear-gradient(to right, #e1e1e1, #efe); /* Chrome 10-25, Safari 5.1-6 */
+}
+footer > .wrapper {
+    padding: .25em 0;
+}
+footer .col {
+    margin-right: 0;
 }
 
 .col {
@@ -69,4 +74,13 @@ main > .wrapper {
     flex: 1;
     border-bottom: 2px black dotted;
     margin: 0 0.5rem;
+}
+.text-right {
+    text-align: right;
+}
+.text-left {
+    text-align: left;
+}
+.text-center {
+    text-align: center;
 }

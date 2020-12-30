@@ -99,10 +99,16 @@ const getSchedule = () => {
     case 1: // mon
     case 2: // tue
     case 3: // wed
-      schedule = [EVENTS.shacharis, EVENTS.dafMorning, EVENTS.mariv];
+      schedule = [
+        EVENTS.oraissa,
+        EVENTS.shacharis,
+        EVENTS.dafMorning,
+        EVENTS.mariv,
+      ];
       break;
     case 4: // thu
       schedule = [
+        EVENTS.oraissa,
         EVENTS.shacharis,
         EVENTS.dafMorning,
         EVENTS.mariv,
@@ -125,7 +131,7 @@ const get3DaySchedule = () => {
   const tomorrow = moment().add(1, "day");
   const third = moment().add(2, "day");
   const key_today = `Today (${today.format("dddd")})`;
-  const key_tomorrow = `Tomorrow (${tomorrow.format("dddd")})`;
+  const key_tomorrow = `${tomorrow.format("dddd")}`;
   const key_third = `${third.format("dddd")}`;
   const ret = {};
   ret[key_today] = getSchedule(today);
@@ -233,3 +239,17 @@ const toTitleCase = (str) =>
 [...document.querySelectorAll(".parsha")].map(
   (elem) => (elem.innerHTML = getCurrentParsha())
 );
+
+const timeElements = [...document.querySelectorAll(".time")];
+setInterval(() =>
+  timeElements.map((elem) => (elem.innerHTML = moment().format("LTS")), 1000)
+);
+const hebrewDateElements = [...document.querySelectorAll(".hebrew-date")];
+hebrewDateElements.map(
+  (elem) =>
+    (elem.innerHTML = new KosherZmanim.JewishCalendar(moment().toDate()))
+);
+const englishDateElements = [...document.querySelectorAll(".english-date")];
+englishDateElements.map((elem) => (elem.innerHTML = moment().format("LL")));
+
+setTimeout(() => window.location.reload(), 5 * 1000 * 60);
