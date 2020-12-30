@@ -27,14 +27,13 @@ h1 {
     font-size: 2.25rem;
 }
 .wrapper {
-    height: 100%;
     display: flex;
     flex-direction: row;
     font-size: 1rem;
     padding:0 1.5rem;
 }
-main > .wrapper {
-  background: linear-gradient(to right, #e1e1e1, #efe); /* Chrome 10-25, Safari 5.1-6 */
+main  {
+  background: linear-gradient(to bottom right, #e1e1e1, #efe); /* Chrome 10-25, Safari 5.1-6 */
 }
 footer > .wrapper {
     padding: .25em 0;
@@ -45,7 +44,7 @@ footer .col {
 
 .col {
     /* width: 33%; */
-    flex-grow: 1;
+    flex: 1 1 0px;
     margin-right:1.5rem;
     /* padding: 0 1.5rem; */
     /* display: flex; */
@@ -53,15 +52,6 @@ footer .col {
 }
 .col:last-of-type) {
     margin-right: 0;
-}
-
-.left {
-    /* border-right: 2px grey solid; */
-    min-width: 66%;
-}
-.right {
-    box-shadow: -3px 0 0 grey;
-    padding-left: 1.5rem;
 }
 
 .row {
@@ -83,4 +73,14 @@ footer .col {
 }
 .text-center {
     text-align: center;
+}
+
+@media only screen and (max-width: 600px) {
+    main > .wrapper {
+        flex-direction: column;
+        padding-bottom: 2rem;
+    }
+    main {
+        overflow-y: scroll;
+    }
 }

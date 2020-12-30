@@ -1,3 +1,7 @@
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+  navigator.userAgent
+);
+
 const today = new Date().toISOString();
 const options = {
   date: today,
@@ -5,7 +9,7 @@ const options = {
   locationName: "Monsey",
   latitude: 41.137804,
   longitude: -74.044059,
-  elevation: 554.5, // feet, or 169 meters
+  elevation: 169, //  meters
   complexZmanim: true,
 };
 json = KosherZmanim.getZmanimJson(options);
@@ -88,11 +92,10 @@ const EVENTS = {
     value: "??",
   },
 };
-const getSchedule = () => {
+const getSchedule = (m) => {
   let schedule = [];
-  const today = moment();
 
-  switch (today.weekday()) {
+  switch (m.weekday()) {
     case 0: // sunday
       schedule = [EVENTS.sundayShacharis, EVENTS.yorucha, EVENTS.minchaMariv];
       break;
