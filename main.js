@@ -24,12 +24,15 @@ const getZmanim = (m) => {
     locationName: "Monsey",
     latitude: 41.137804,
     longitude: -74.044059,
-    elevation: 554.5, // feet, or 169 meters
+    elevation: 169,
     complexZmanim: true,
   };
   const { Zmanim } = KosherZmanim.getZmanimJson(options);
   return Zmanim;
 };
+const friday = moment().startOf("week").add(6, "days");
+const shabbos = moment().startOf("week").add(7, "days");
+
 const EVENTS = {
   sundayShacharis: {
     label: "Shacharis",
@@ -55,6 +58,10 @@ const EVENTS = {
     label: "Daf Yomi",
     value: "Following Shacharis",
   },
+  dafEvening: {
+    label: "Daf Yomi",
+    value: "9:00 PM",
+  },
   mariv: {
     label: "Mariv",
     value: "8:15 PM",
@@ -69,7 +76,7 @@ const EVENTS = {
   },
   shabbosEarlyMincha: {
     label: "Early Mincha",
-    value: "??",
+    value: "1:45 PM",
   },
   tehillim: {
     label: "Tehillim",
@@ -77,19 +84,31 @@ const EVENTS = {
   },
   shabbosMincha: {
     label: "Mincha",
-    value: "??",
+    value: moment(getZmanim(shabbos).SeaLevelSunset).subtract(35, "minutes"),
   },
   shabbosMariv: {
     label: "Mariv Motzei Shabbos",
-    value: "??",
+    value: moment(getZmanim(shabbos).SeaLevelSunset).add(50, "minutes"),
   },
   shabbosHavdala: {
     label: "Havdalah",
-    value: "??",
+    value: moment(getZmanim(shabbos).Tzais),
+  },
+  dafYomiFridayNight: {
+    label: "Daf Yomi",
+    value: "8:00 PM",
   },
   shabbosAvosUbanim: {
     label: "Avos Ubanim",
-    value: "??",
+    value: moment(getZmanim(shabbos).SeaLevelSunset).add(2, "hours"),
+  },
+  minchaErevShabbos: {
+    label: "Mincha Erev Shabbos",
+    value: moment(getZmanim(friday).CandleLighting).add(8, "minutes"),
+  },
+  candleLighting: {
+    label: "Candle Lighting",
+    value: moment(getZmanim(friday).CandleLighting),
   },
 };
 const getSchedule = (m) => {
@@ -107,6 +126,7 @@ const getSchedule = (m) => {
         EVENTS.shacharis,
         EVENTS.dafMorning,
         EVENTS.mariv,
+        EVENTS.dafEvening,
       ];
       break;
     case 4: // thu
@@ -116,13 +136,27 @@ const getSchedule = (m) => {
         EVENTS.dafMorning,
         EVENTS.mariv,
         EVENTS.parshaShiur,
+        EVENTS.dafEvening,
       ];
       break;
     case 5: // friday
-      schedule = [EVENTS.shacharis, EVENTS.dafMorning, EVENTS.mariv];
+      schedule = [
+        EVENTS.shacharis,
+        EVENTS.dafMorning,
+        EVENTS.candleLighting,
+        EVENTS.minchaErevShabbos,
+        EVENTS.dafYomiFridayNight,
+      ];
       break;
     case 6: // shabbos
-      schedule = [EVENTS.shacharis, EVENTS.dafMorning, EVENTS.mariv];
+      schedule = [
+        EVENTS.shabbosShacharis,
+        EVENTS.shabbosEarlyMincha,
+        EVENTS.shabbosMincha,
+        EVENTS.shabbosMariv,
+        EVENTS.shabbosHavdala,
+        EVENTS.shabbosAvosUbanim,
+      ];
       break;
 
     default:
@@ -142,8 +176,6 @@ const get3DaySchedule = () => {
   ret[key_third] = getSchedule(third);
   return ret;
 };
-const friday = moment().startOf("week").add(6, "days");
-const shabbos = moment().startOf("week").add(7, "days");
 
 const schedules = {
   ...get3DaySchedule(),
@@ -203,22 +235,6 @@ const renderSchedule = (schedule) =>
     )
     .join("");
 
-Object.keys(schedules).map((schedule) => {
-  console.log(`Rendering ${schedule}`);
-  let elem;
-  try {
-    elem = document.querySelector("." + schedule);
-  } catch {}
-
-  if (!elem) {
-    elem = document.querySelector(".schedule");
-    elem.innerHTML += `<h2>${schedule}</h2>`;
-    elem.innerHTML += renderSchedule(schedules[schedule]);
-  } else {
-    elem.innerHTML = renderSchedule(schedules[schedule]);
-  }
-});
-
 const getCurrentParsha = () =>
   toTitleCase(
     KosherZmanim.Parsha[
@@ -239,6 +255,24 @@ const toTitleCase = (str) =>
     )
     .join("");
 
+Object.keys(schedules).map((schedule) => {
+  console.log(`Rendering ${schedule}`);
+  let elem;
+  try {
+    elem = document.querySelector("." + schedule);
+  } catch {}
+
+  if (!elem) {
+    elem = document.querySelector(".schedule");
+    elem.innerHTML += `<h2>${
+      schedule === "Saturday" ? "Shabbos - " + getCurrentParsha() : schedule
+    }</h2>`;
+    elem.innerHTML += renderSchedule(schedules[schedule]);
+  } else {
+    elem.innerHTML = renderSchedule(schedules[schedule]);
+  }
+});
+
 [...document.querySelectorAll(".parsha")].map(
   (elem) => (elem.innerHTML = getCurrentParsha())
 );
@@ -256,3 +290,8 @@ const englishDateElements = [...document.querySelectorAll(".english-date")];
 englishDateElements.map((elem) => (elem.innerHTML = moment().format("LL")));
 
 setTimeout(() => window.location.reload(), 5 * 1000 * 60);
+
+const mapElements = (cssSelector, callback) =>
+  [...document.querySelectorAll(cssSelector)].map(
+    (elem) => (elem.innerHTML = callback())
+  );
