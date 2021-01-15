@@ -105,7 +105,7 @@ const EVENTS = {
   },
   tehillim: {
     label: "Tehillim",
-    value: "??",
+    value: "2:30 PM",
   },
   shabbosOraissa: {
     label: "Oraissa",
@@ -119,7 +119,9 @@ const EVENTS = {
   },
   likrasShabbos: {
     label: "Likras Shabbos",
-    value: "??",
+    value: moment(getZmanim(friday).CandleLighting)
+      .add(8, "minutes")
+      .subtract(20, "minutes"),
   },
   shabbosMariv: {
     label: "Mariv Motzei Shabbos",
@@ -129,14 +131,30 @@ const EVENTS = {
     label: "Havdalah",
     value: moment(getZmanim(shabbos).Tzais),
   },
+  shabbosDayDaf: {
+    label: "Daf Yomi",
+    value: moment(getZmanim(shabbos).SeaLevelSunset)
+      .subtract(35, "minutes")
+      .subtract(1, "hours"),
+  },
   dafYomiFridayNight: {
     label: "Daf Yomi",
     value: "8:00 PM",
   },
-  shabbosAvosUbanim: {
+  shabbosAvosUbanim: (m) => ({
     label: "Avos Ubanim",
-    value: moment(getZmanim(shabbos).SeaLevelSunset).add(2, "hours"),
-  },
+    value:
+      m.isSame(moment("2021-01-16"), "day") ||
+      m.isSame(moment("2021-01-23"), "day")
+        ? m.hour(6).minutes(40)
+        : m.isSame(moment("2021-02-6"), "day") ||
+          m.isSame(moment("2021-01-30"), "day")
+        ? m.hour(6).minutes(45)
+        : m.isSame(moment("2021-02-13"), "day") ||
+          m.isSame(moment("2021-02-20"), "day")
+        ? m.hour(7).minutes(0)
+        : "TBD",
+  }),
   minchaErevShabbos: {
     label: "Mincha Erev Shabbos",
     value: moment(getZmanim(friday).CandleLighting).add(8, "minutes"),
@@ -187,11 +205,13 @@ const getSchedule = (m) => {
       schedule = [
         EVENTS.shabbosShacharis,
         EVENTS.shabbosEarlyMincha,
+        EVENTS.tehillim,
         EVENTS.shabbosOraissa,
+        EVENTS.shabbosDayDaf,
         EVENTS.shabbosMincha,
         EVENTS.shabbosMariv,
-        EVENTS.shabbosHavdala,
-        EVENTS.shabbosAvosUbanim,
+        // EVENTS.shabbosHavdala,
+        EVENTS.shabbosAvosUbanim(m),
       ];
       break;
 
@@ -218,23 +238,23 @@ const schedules = {
   zmanim: [
     {
       label: "Neitz",
-      value: roundUp(moment(json.Zmanim.SeaLevelSunrise)),
+      value: moment(json.Zmanim.SeaLevelSunrise),
     },
     {
       label: 'Krias Shema (MG"A)',
-      value: roundDown(moment(json.Zmanim.SofZmanShmaMGA)),
+      value: moment(json.Zmanim.SofZmanShmaMGA),
     },
     {
       label: 'Krias Shema (GR"A)',
-      value: roundDown(moment(json.Zmanim.SofZmanShmaGRA)),
+      value: moment(json.Zmanim.SofZmanShmaGRA),
     },
     {
       label: 'Zman Tefilla (MG"A)',
-      value: roundDown(moment(json.Zmanim.SofZmanTfilaMGA)),
+      value: moment(json.Zmanim.SofZmanTfilaMGA),
     },
     {
       label: 'Zman Tefilla (GR"A)',
-      value: roundDown(moment(json.Zmanim.SofZmanTfilaGRA)),
+      value: moment(json.Zmanim.SofZmanTfilaGRA),
     },
     {
       label: "Chatzos",
@@ -242,15 +262,15 @@ const schedules = {
     },
     {
       label: "Shkia",
-      value: roundDown(moment(json.Zmanim.SeaLevelSunset)),
+      value: moment(json.Zmanim.SeaLevelSunset),
     },
     {
       label: "Tzais",
-      value: roundUp(moment(json.Zmanim.Tzais)),
+      value: moment(json.Zmanim.Tzais),
     },
     {
       label: "Tzais (72)",
-      value: roundUp(moment(json.Zmanim.Tzais72)),
+      value: moment(json.Zmanim.Tzais72),
     },
   ],
 };
@@ -264,7 +284,13 @@ const renderSchedule = (schedule) =>
                 <div class="label">${label}</div>
                 <div class="dots"></div>
         <div class="value">${
-          typeof value === "string" ? value : value.format("LT")
+          typeof value === "string"
+            ? value
+            : typeof value === "function"
+            ? typeof value() === "string"
+              ? value()
+              : value().format("LT")
+            : value.format("LT")
         }</div>
               </div>
     `
@@ -303,7 +329,7 @@ hebrewDateElements.map(
 const englishDateElements = [...document.querySelectorAll(".english-date")];
 englishDateElements.map((elem) => (elem.innerHTML = moment().format("LL")));
 
-if (!isMobile) setTimeout(() => window.location.reload(), 5 * 1000 * 60);
+if (!isMobile) setTimeout(() => window.location.reload(), 1000 * 60 * 60);
 
 const mapElements = (cssSelector, callback) =>
   [...document.querySelectorAll(cssSelector)].map(
