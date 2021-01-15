@@ -28,9 +28,10 @@ main {
 
 h1 {
     /* padding: 0 1.5rem; */
-    color: var(--primary);
+    color: var(--secondary);
     font-size: 2.25rem;
-    text-shadow: 0 0 1rem rgba(0,0,0,.5);
+    /* text-shadow: 0 0 1rem rgba(0,0,0,.5); */
+    text-shadow: 2px 2px 3px rgba(0,0,0,.5);
 }
 .wrapper {
     height: 100%;
@@ -41,18 +42,19 @@ h1 {
 }
 main  {
   background: linear-gradient(to bottom right, #e1e1e1, #efe); /* Chrome 10-25, Safari 5.1-6 */
-    background-image: url('./shul_1.png');
+    background-image: url('./shul_2.png');
     background-attachment: fixed;
     background-size: cover;
 }
 .frosted {
-    backdrop-filter: blur(65px);
+    backdrop-filter: blur(15px);
     background-color: rgba(255,255,255,.2);
     border-radius: 10px;
     margin: .35rem;
     padding: .45rem;
-    box-shadow: 0 0 1rem rgba(0,0,0,.5);
+    box-shadow: 0 0 5px rgba(0,0,0,.5);
     color: white;
+    text-shadow: 2px 2px 3px rgba(0,0,0,.5);
 }
 footer > .wrapper {
     padding: .25em 0;

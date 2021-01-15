@@ -2,6 +2,31 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
   navigator.userAgent
 );
 
+const L = (str) =>
+  ({
+    Saturday: "Shabbos - " + getCurrentParsha(),
+  }[str] || str);
+
+const getCurrentParsha = () =>
+  toTitleCase(
+    KosherZmanim.Parsha[
+      new KosherZmanim.JewishCalendar(
+        moment().startOf("week").add(6, "days").toDate()
+      ).getParsha()
+    ]
+  );
+
+const toTitleCase = (str) =>
+  str
+    .split(" ")
+    .map((word) =>
+      word
+        .split("")
+        .map((c, i) => (i === 0 ? c.toUpperCase() : c.toLowerCase()))
+        .join("")
+    )
+    .join("");
+
 const today = new Date().toISOString();
 const options = {
   date: today,
@@ -82,9 +107,19 @@ const EVENTS = {
     label: "Tehillim",
     value: "??",
   },
+  shabbosOraissa: {
+    label: "Oraissa",
+    value: moment(getZmanim(shabbos).SeaLevelSunset)
+      .subtract(35, "minutes")
+      .subtract(1, "hours"),
+  },
   shabbosMincha: {
     label: "Mincha",
     value: moment(getZmanim(shabbos).SeaLevelSunset).subtract(35, "minutes"),
+  },
+  likrasShabbos: {
+    label: "Likras Shabbos",
+    value: "??",
   },
   shabbosMariv: {
     label: "Mariv Motzei Shabbos",
@@ -152,6 +187,7 @@ const getSchedule = (m) => {
       schedule = [
         EVENTS.shabbosShacharis,
         EVENTS.shabbosEarlyMincha,
+        EVENTS.shabbosOraissa,
         EVENTS.shabbosMincha,
         EVENTS.shabbosMariv,
         EVENTS.shabbosHavdala,
@@ -163,22 +199,22 @@ const getSchedule = (m) => {
   }
   return schedule;
 };
-const get3DaySchedule = () => {
+const get2DaySchedule = () => {
   const today = moment();
   const tomorrow = moment().add(1, "day");
-  const third = moment().add(2, "day");
-  const key_today = `Today (${today.format("dddd")})`;
-  const key_tomorrow = `${tomorrow.format("dddd")}`;
-  const key_third = `${third.format("dddd")}`;
+  // const third = moment().add(2, "day");
+  const key_today = `Today (${L(today.format("dddd"))})`;
+  const key_tomorrow = `${L(tomorrow.format("dddd"))}`;
+  // const key_third = `${third.format("dddd")}`;
   const ret = {};
   ret[key_today] = getSchedule(today);
   ret[key_tomorrow] = getSchedule(tomorrow);
-  ret[key_third] = getSchedule(third);
+  // ret[key_third] = getSchedule(third);
   return ret;
 };
 
 const schedules = {
-  ...get3DaySchedule(),
+  ...get2DaySchedule(),
   zmanim: [
     {
       label: "Neitz",
@@ -235,26 +271,6 @@ const renderSchedule = (schedule) =>
     )
     .join("");
 
-const getCurrentParsha = () =>
-  toTitleCase(
-    KosherZmanim.Parsha[
-      new KosherZmanim.JewishCalendar(
-        moment().startOf("week").add(6, "days").toDate()
-      ).getParsha()
-    ]
-  );
-
-const toTitleCase = (str) =>
-  str
-    .split(" ")
-    .map((word) =>
-      word
-        .split("")
-        .map((c, i) => (i === 0 ? c.toUpperCase() : c.toLowerCase()))
-        .join("")
-    )
-    .join("");
-
 Object.keys(schedules).map((schedule) => {
   console.log(`Rendering ${schedule}`);
   let elem;
@@ -264,9 +280,7 @@ Object.keys(schedules).map((schedule) => {
 
   if (!elem) {
     elem = document.querySelector(".schedule");
-    elem.innerHTML += `<h2>${
-      schedule === "Saturday" ? "Shabbos - " + getCurrentParsha() : schedule
-    }</h2>`;
+    elem.innerHTML += `<h2>${schedule}</h2>`;
     elem.innerHTML += renderSchedule(schedules[schedule]);
   } else {
     elem.innerHTML = renderSchedule(schedules[schedule]);
@@ -289,7 +303,7 @@ hebrewDateElements.map(
 const englishDateElements = [...document.querySelectorAll(".english-date")];
 englishDateElements.map((elem) => (elem.innerHTML = moment().format("LL")));
 
-setTimeout(() => window.location.reload(), 5 * 1000 * 60);
+if (!isMobile) setTimeout(() => window.location.reload(), 5 * 1000 * 60);
 
 const mapElements = (cssSelector, callback) =>
   [...document.querySelectorAll(cssSelector)].map(
