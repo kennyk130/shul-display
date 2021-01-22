@@ -161,7 +161,7 @@ const EVENTS = {
   },
   candleLighting: {
     label: "Candle Lighting",
-    value: moment(getZmanim(friday).CandleLighting),
+    value: roundDown(moment(getZmanim(friday).CandleLighting)),
   },
 };
 const getSchedule = (m) => {
@@ -235,7 +235,7 @@ const schedules = {
   zmanim: [
     {
       label: "Neitz",
-      value: moment(json.Zmanim.SeaLevelSunrise),
+      value: roundUp(moment(json.Zmanim.SeaLevelSunrise)),
     },
     {
       label: 'Krias Shema (MG"A)',
@@ -245,10 +245,10 @@ const schedules = {
       label: 'Krias Shema (GR"A)',
       value: moment(json.Zmanim.SofZmanShmaGRA),
     },
-    {
-      label: 'Zman Tefilla (MG"A)',
-      value: moment(json.Zmanim.SofZmanTfilaMGA),
-    },
+    // {
+    //   label: 'Zman Tefilla (MG"A)',
+    //   value: moment(json.Zmanim.SofZmanTfilaMGA),
+    // },
     {
       label: 'Zman Tefilla (GR"A)',
       value: moment(json.Zmanim.SofZmanTfilaGRA),
@@ -263,11 +263,11 @@ const schedules = {
     },
     {
       label: "Tzais",
-      value: moment(json.Zmanim.Tzais),
+      value: roundUp(moment(json.Zmanim.Tzais)),
     },
     {
       label: "Tzais (72)",
-      value: moment(json.Zmanim.Tzais72),
+      value: roundUp(moment(json.Zmanim.Tzais72)),
     },
   ],
 };
