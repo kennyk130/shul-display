@@ -1,6 +1,7 @@
 :root {
     --primary: #839ea4;
     --secondary: #eee;
+    --hf-height: 3rem;
 }
 body {
     padding: 0;
@@ -14,7 +15,7 @@ body {
 
 header, footer {
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 2rem;
     padding: 0.5rem;
     background-color: var(--primary);
     color: white;
@@ -29,7 +30,7 @@ main {
 h1 {
     /* padding: 0 1.5rem; */
     color: var(--secondary);
-    font-size: 2.25rem;
+    font-size: 2.75rem;
     /* text-shadow: 0 0 1rem rgba(0,0,0,.5); */
     text-shadow: 2px 2px 3px rgba(0,0,0,.5);
 }
@@ -37,7 +38,7 @@ h1 {
     height: 100%;
     display: flex;
     flex-direction: row;
-    font-size: 1rem;
+    font-size: 2rem;
     /* padding:0 1.5rem; */
 }
 main  {
@@ -50,11 +51,17 @@ main  {
     backdrop-filter: blur(15px);
     background-color: rgba(255,255,255,.2);
     border-radius: 10px;
-    margin: .35rem;
-    padding: .45rem;
+    margin: .55rem .75rem;
+    padding: .75rem;
     box-shadow: 0 0 5px rgba(0,0,0,.5);
     color: white;
     text-shadow: 2px 2px 3px rgba(0,0,0,.5);
+}
+.frosted:first-of-type{
+    margin-left: calc(.75rem*2);
+}
+.frosted:last-of-type{
+    margin-right: calc(.75rem*2);
 }
 footer > .wrapper {
     padding: .25em 0;

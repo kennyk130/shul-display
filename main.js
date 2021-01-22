@@ -219,22 +219,19 @@ const getSchedule = (m) => {
   }
   return schedule;
 };
-const get2DaySchedule = () => {
-  const today = moment();
-  const tomorrow = moment().add(1, "day");
-  // const third = moment().add(2, "day");
-  const key_today = `Today (${L(today.format("dddd"))})`;
-  const key_tomorrow = `${L(tomorrow.format("dddd"))}`;
-  // const key_third = `${third.format("dddd")}`;
-  const ret = {};
-  ret[key_today] = getSchedule(today);
-  ret[key_tomorrow] = getSchedule(tomorrow);
-  // ret[key_third] = getSchedule(third);
-  return ret;
-};
+const getNDaySchedule = (n) =>
+  [...new Array(n)].reduce((prev, cur, i) => {
+    const today = moment();
+    const dayN = moment().add(i, "day");
+    const key = today.isSame(dayN, "day")
+      ? `Today (${L(dayN.format("dddd"))})`
+      : L(dayN.format("dddd"));
+    prev[key] = getSchedule(dayN);
+    return prev;
+  }, {});
 
 const schedules = {
-  ...get2DaySchedule(),
+  ...getNDaySchedule(2),
   zmanim: [
     {
       label: "Neitz",
@@ -335,3 +332,13 @@ const mapElements = (cssSelector, callback) =>
   [...document.querySelectorAll(cssSelector)].map(
     (elem) => (elem.innerHTML = callback())
   );
+
+const pageLoad = moment();
+setInterval(
+  () =>
+    mapElements(
+      ".refresh-time",
+      () => "<small><i>Refreshed " + pageLoad.fromNow()
+    ) + "...</i></small>",
+  1000
+);
