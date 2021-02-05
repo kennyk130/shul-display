@@ -110,11 +110,25 @@ footer .col {
 }
 
 @media only screen and (max-width: 600px) {
+    header, footer {
+        font-size: 1.5rem;
+    }
+    h1 {
+        text-align: center;
+        font-size: 1.5rem;
+    }
     main > .wrapper {
         flex-direction: column;
         padding-bottom: 2rem;
     }
+    .wrapper {
+    font-size: 1.1rem;
+
+    }
     main {
         overflow-y: scroll;
     }
+.frosted, .frosted:first-of-type, .frosted:last-of-type{
+    margin: .55rem 0;
+}
 }
