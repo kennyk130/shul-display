@@ -230,22 +230,22 @@ const getSchedule = (m) => {
         },
         shabbosAvosUbanim: {
             label: "Avos Ubanim",
-            value:
-                m.isSame(moment("2021-01-16"), "day") ||
-                m.isSame(moment("2021-01-23"), "day")
-                    ? m.hour(6).minutes(40)
-                    : m.isSame(moment("2021-02-6"), "day") ||
-                      m.isSame(
-                          moment(
-                              "2021-February 12, 2021	6:55 AM	8:56 AM	9:32 AM	10:25 AM	12:10 PM	5:09 PM	5:27 PM	6:39 PM01-30"
-                          ),
-                          "day"
-                      )
-                    ? m.hour(6).minutes(45)
-                    : m.isSame(moment("2021-02-13"), "day") ||
-                      m.isSame(moment("2021-02-20"), "day")
-                    ? m.hour(7).minutes(0)
-                    : "TBD",
+            value: "7:00 PM",
+            // m.isSame(moment("2021-01-16"), "day") ||
+            // m.isSame(moment("2021-01-23"), "day")
+            //     ? m.hour(6).minutes(40)
+            //     : m.isSame(moment("2021-02-6"), "day") ||
+            //       m.isSame(
+            //           moment(
+            //               "2021-February 12, 2021	6:55 AM	8:56 AM	9:32 AM	10:25 AM	12:10 PM	5:09 PM	5:27 PM	6:39 PM01-30"
+            //           ),
+            //           "day"
+            //       )
+            //     ? m.hour(6).minutes(45)
+            //     : m.isSame(moment("2021-02-13"), "day") ||
+            //       m.isSame(moment("2021-02-20"), "day")
+            //     ? m.hour(7).minutes(0)
+            //     : "TBD",
         },
         minchaErevShabbos: {
             label: "Mincha Erev Shabbos",
