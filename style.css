@@ -11,6 +11,7 @@ body {
     flex-flow: column nowrap;
     justify-content: space-between;
     height: 100vh;
+    overflow-y: hidden;
 }
 
 header, footer {
@@ -63,9 +64,9 @@ main  {
 .frosted:last-of-type{
     margin-right: calc(.75rem*2);
 }
-footer > .wrapper {
-    padding: .25em 0;
-}
+/* footer > .wrapper { */
+/*     padding: .25em 0; */
+/* } */
 footer .col {
     margin-right: 0;
 }
@@ -131,4 +132,7 @@ footer .col {
 .frosted, .frosted:first-of-type, .frosted:last-of-type{
     margin: .55rem 0;
 }
+    body{
+        overflow-y: unset;
+    }
 }
