@@ -316,55 +316,53 @@ const getSchedule = (m) => {
 };
 const getNDaySchedule = (n) =>
     [...new Array(n)].reduce((prev, cur, i) => {
+        const formatString = "dddd -- D/M";
         const today = moment();
         const dayN = moment().add(i, "day");
         const key = today.isSame(dayN, "day")
-            ? `Today (${L(dayN.format("dddd"))})`
-            : L(dayN.format("dddd"));
+            ? `Today (${dayN
+                  .format(formatString)
+                  .replace("Saturday", "Shabbos")})`
+            : dayN.format(formatString).replace("Saturday", "Shabbos");
         prev[key] = getSchedule(dayN);
         return prev;
     }, {});
 
+const todaysZmanim = getZmanim(moment());
 const schedules = {
-    ...getNDaySchedule(2),
+    ...getNDaySchedule(isMobile ? 7 : 2),
     zmanim: [
         {
             label: "Neitz",
-            value: roundUp(moment(getZmanim(moment()).SeaLevelSunrise)),
+            value: moment(todaysZmanim.SeaLevelSunrise),
         },
         {
-            label: 'Krias Shema (MG"A)',
-            value: moment(getZmanim(moment()).SofZmanShmaMGA),
+            label: 'Sof Krias Shema (MG"A)',
+            value: moment(todaysZmanim.SofZmanShmaMGA),
         },
         {
-            label: 'Krias Shema (GR"A)',
-            value: moment(getZmanim(moment()).SofZmanShmaGRA),
+            label: 'Sof Krias Shema (GR"A)',
+            value: moment(todaysZmanim.SofZmanShmaGRA),
         },
-        // {
-        //   label: 'Zman Tefilla (MG"A)',
-        //   value: moment(getZmanim(moment()).SofZmanTfilaMGA),
-        // },
         {
-            label: 'Zman Tefilla (GR"A)',
-            value: moment(getZmanim(moment()).SofZmanTfilaGRA),
+            label: 'Sof Zman Tefilla (GR"A)',
+            value: moment(todaysZmanim.SofZmanTfilaGRA),
         },
         {
             label: "Chatzos",
-            value: moment(getZmanim(moment()).Chatzos),
+            value: moment(todaysZmanim.Chatzos),
         },
         {
             label: "Shkia",
-            value: moment(getZmanim(moment()).SeaLevelSunset),
+            value: moment(todaysZmanim.SeaLevelSunset),
         },
         {
-            label: "Tzais",
-            value: roundUp(
-                moment(getZmanim(moment()).SeaLevelSunset).add(50, "minutes")
-            ),
+            label: "Tzais (50)",
+            value: moment(todaysZmanim.SeaLevelSunset).add(50, "minutes"),
         },
         {
             label: "Tzais (72)",
-            value: roundUp(moment(getZmanim(moment()).Tzais72)),
+            value: moment(todaysZmanim.Tzais72),
         },
     ],
 };
