@@ -226,7 +226,7 @@ const getSchedule = (m) => {
         },
         dafYomiFridayNight: {
             label: "Daf Yomi",
-            value: "8:00 PM",
+            value: "8:15 PM",
         },
         shabbosAvosUbanim: {
             label: "Avos Ubanim",
