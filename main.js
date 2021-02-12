@@ -230,7 +230,7 @@ const getSchedule = (m) => {
         },
         shabbosAvosUbanim: {
             label: "Avos Ubanim",
-            value: "7:00 PM",
+            value: "7:10 PM",
             // m.isSame(moment("2021-01-16"), "day") ||
             // m.isSame(moment("2021-01-23"), "day")
             //     ? m.hour(6).minutes(40)
@@ -316,7 +316,7 @@ const getSchedule = (m) => {
 };
 const getNDaySchedule = (n) =>
     [...new Array(n)].reduce((prev, cur, i) => {
-        const formatString = "dddd -- D/M";
+        const formatString = "dddd -- M/D";
         const today = moment();
         const dayN = moment().add(i, "day");
         const key = today.isSame(dayN, "day")
