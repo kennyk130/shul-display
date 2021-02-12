@@ -431,3 +431,10 @@ setInterval(
         ) + "...</i></small>",
     1000
 );
+
+fetch(window.location.href + "announcements.md")
+    .then((r) => r.text())
+    .then((r) => {
+        (converter = new showdown.Converter()), (html = converter.makeHtml(r));
+        document.querySelector(".announcements").innerHTML = html;
+    });
