@@ -1,2 +1,2 @@
 # shul-display
-Site: https://github.com/kennyk130/shul-display/main
+Site: https://kehilas-zichron-yaakov.github.io/shul-display
