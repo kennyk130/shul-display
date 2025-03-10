@@ -1,3 +1,3 @@
 # shul-display
 
-Site: https://github.com/kennyk130/shul-display/main.js
+Site: https://github.com/kennyk130/shul-display/main
